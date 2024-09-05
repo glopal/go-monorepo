@@ -11,7 +11,7 @@ An example approach of how to detect changes to a deployable module. This repo h
     └── extras      // module
 ```
 
-Run `task build` to see produce checksums for the deployable modules.
+Run `task build` to see generated checksums for the deployable modules.
 ```
 ➜  go-monorepo git:(main) ✗ task build
 task: Task "clean" is up to date
