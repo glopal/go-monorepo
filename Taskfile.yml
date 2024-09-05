@@ -1,0 +1,35 @@
+version: '3'
+
+vars:
+  BUILD_DIR: ./apps
+
+tasks:
+  clean:
+    sources:
+      - "**/*/go.mod"
+    cmds:
+      - ./hack/clean.sh
+
+  build:
+    vars:
+      BUILD_TARGETS:
+        sh: find {{.BUILD_DIR}} -name go.mod | xargs -n 1 head -1 | awk '{ print $2 }'
+    cmds:
+      - task: clean
+      - for: { var: BUILD_TARGETS }
+        task: checksum-{{.ITEM}}
+
+  checksum-*:
+    silent: true
+    env:
+      GOWORK: off
+    vars:
+      DIR:
+        sh: go mod edit -json 2> /dev/null | jq '.Replace[] | select(.Old.Path == "{{index .MATCH 0}}") | .New.Path'
+    dir: "{{.DIR}}"
+    cmds:
+      - defer: rm -rf vendor
+      - go mod vendor 2> /dev/null
+      - echo -n "{{index .MATCH 0}} - "; gtar --mtime '2020-01-01' -cf - . | md5sum | awk '{ print $1 }'
+
+
