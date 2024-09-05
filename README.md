@@ -21,4 +21,4 @@ app1 - 317f9f7a2ffe083a5c6827122889f143
 
 Importantly, the checksum includes any dependent local modules. As an example, the `app1` module has dependencies on both the `core` and `extra` modules. If you update code in either of the local dependancies, the checksum will reflect it.
 
-This is accomplished by hacking up the `go.mod`s to allow for local vendoring.
+This is accomplished by hacking up the `go.mod`s to allow for local vendoring. Largely inspired by the `kubernetes` monorepo. https://github.com/kubernetes/kubernetes
